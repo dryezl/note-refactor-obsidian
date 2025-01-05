@@ -5,7 +5,9 @@ import {
   DataAdapter,
   SuggestModal,
   getLinkpath,
-  Editor
+  Editor,
+  getAllTags,
+  MetadataCache
 } from 'obsidian';
 import MomentDateRegex from './moment-date-regex';
 import { NoteRefactorSettingsTab } from './settings-tab';
@@ -153,7 +155,7 @@ export default class NoteRefactor extends Plugin {
     if (this.settings.refactoredNoteTemplate !== undefined && this.settings.refactoredNoteTemplate !== '') {
       const link = await this.app.fileManager.generateMarkdownLink(mdView.file, '', '', '');
       const newNoteLink = await this.NRDoc.markdownLink(filePath);
-      note = this.NRDoc.templatedContent(note, this.settings.refactoredNoteTemplate, mdView.file.basename, link, fileName, newNoteLink, '', note);
+      note = this.NRDoc.templatedContent(note, this.settings.refactoredNoteTemplate, mdView.file.basename, link, fileName, newNoteLink, '', note, '');
     }
 
     await this.obsFile.createOrAppendFile(fileName, note);
@@ -173,8 +175,10 @@ export default class NoteRefactor extends Plugin {
 
     if (this.settings.refactoredNoteTemplate !== undefined && this.settings.refactoredNoteTemplate !== '') {
       const link = await this.app.fileManager.generateMarkdownLink(mdView.file, '', '', '');
+      const tags = getAllTags(await this.app.metadataCache.getFileCache(mdView.file));
+      const tagsString = tags.unique().sort().join('\n ');
       const newNoteLink = await this.NRDoc.markdownLink(filePath);
-      note = this.NRDoc.templatedContent(note, this.settings.refactoredNoteTemplate, mdView.file.basename, link, fileName, newNoteLink, '', note);
+      note = this.NRDoc.templatedContent(note, this.settings.refactoredNoteTemplate, mdView.file.basename, link, fileName, newNoteLink, '', note, tagsString);
     }
     await this.obsFile.createOrAppendFile(fileName, note);
     await this.NRDoc.replaceContent(fileName, filePath, doc, mdView.file, note, originalNote, mode);
