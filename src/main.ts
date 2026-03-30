@@ -17,6 +17,7 @@ import ObsidianFile from './obsidian-file';
 import NRDoc, { ReplaceMode } from './doc';
 import NoteRefactorModal from './note-modal';
 import ModalNoteCreation from './modal-note-creation';
+import { NOTE_NAME_SEPARATOR } from './constants';
 
 export default class NoteRefactor extends Plugin {
   settings: NoteRefactorSettings;
@@ -118,7 +119,8 @@ export default class NoteRefactor extends Plugin {
       const mdView = this.app.workspace.activeLeaf.view as MarkdownView;
       const doc = mdView.editor;
       const headingNotes = this.NRDoc.contentSplitByHeading(doc, headingLevel);
-      const dedupedFileNames = this.file.ensureUniqueFileNames(headingNotes);
+      const notePrefix = this.settings.prefixCurrentNoteNameToNewNotes ? mdView.file.basename : undefined;
+      const dedupedFileNames = this.file.ensureUniqueFileNames(headingNotes, notePrefix);
       headingNotes.forEach((hn, i) => this.createNoteWithFirstLineAsFileName(dedupedFileNames[i], hn, mdView, doc, 'replace-headings', true));
   }
 
@@ -130,7 +132,10 @@ export default class NoteRefactor extends Plugin {
       const selectedContent = mode === 'split' ? this.NRDoc.noteRemainder(doc) : this.NRDoc.selectedContent(doc);
       if(selectedContent.length <= 0) { return }
 
-      await this.createNoteWithFirstLineAsFileName(selectedContent[0], selectedContent, mdView, doc, mode, false);
+      const header = this.settings.prefixCurrentNoteNameToNewNotes
+          ? mdView.file.basename + NOTE_NAME_SEPARATOR + selectedContent[0]
+          : selectedContent[0];
+      await this.createNoteWithFirstLineAsFileName(header, selectedContent, mdView, doc, mode, false);
   }
 
   async extractSelectionAutogenerate(mode: ReplaceMode): Promise<void> {
