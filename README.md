@@ -42,6 +42,7 @@ This table shows the different use cases for this plugin and how commands and se
 | 3 | 1. Split a note from the current line of the cursor into new note exactly as it is.<br />2. File name for new note set from the first line of the selection. | Split note here - first line as file name | **Include Heading**<br />False |
 | 4 | 1. Split a note from the current line of the cursor into a new note.<br />2. File name for new note set from the first line of the selection.<br />3. First line included in the new note as a heading. | Split note here - first line as file name | **Exclude First Line**<br />False <br/><br />**Include Heading**<br />True |
 | 5 | 1. Split a note with content under a heading going into a new note for each heading.<br />2. File name for each new note set from the heading. | Split note by headings - H1<br/><br/> Split note by headings - H2 <br/><br/> Split note by headings - H3 |  |
+| 6 | 1. Split a note with content under a heading going into a new note for each heading.<br />2. File name for each new note prefixed with the current note's name (e.g. `Current Note - Heading`). | Split note by headings - H1<br/><br/> Split note by headings - H2 <br/><br/> Split note by headings - H3 | **Prefix Note Name to New Notes**<br />True |
 
 ## Commands
 
@@ -115,6 +116,28 @@ The file name prefix option allows you to specify a prefix for new notes which c
 A prefix set as `{{date:YYYYMMDDHHmm}}-` will add a new file with the following file name:
 
 `202010311425-My New Note`
+
+### Prefix Note Name to New Notes
+
+When this setting is enabled, the name of the currently open note is prepended to the file name of every new note created by a split or extract command, separated by ` - `.
+
+This makes it easy to identify the origin of a note when browsing a flat vault or to group related notes together.
+
+**Example**
+
+With the setting enabled and a note named `Research` split by H2 headings:
+
+| Setting off | Setting on |
+|---|---|
+| `Background.md` | `Research - Background.md` |
+| `Methods.md` | `Research - Methods.md` |
+| `Results.md` | `Research - Results.md` |
+
+The setting applies to the following commands:
+
+- **Split note by headings – H1 / H2 / H3**
+- **Extract selection to new note – first line as file name**
+- **Split note here – first line as file name**
 
 ### Transclude by Default
 
