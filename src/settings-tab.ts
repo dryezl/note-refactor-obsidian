@@ -71,7 +71,7 @@ export class NoteRefactorSettingsTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName('Prefix note name to new notes')
-      .setDesc('When splitting or extracting notes, prefix the current note\'s name to the new note\'s file name (e.g. "Current Note - New Heading").')
+      .setDesc('When splitting notes, prefix the current note\'s name to the new note\'s file name (e.g. "Current Note - New Heading").')
       .addToggle(toggle => toggle.setValue(this.plugin.settings.prefixCurrentNoteNameToNewNotes)
         .onChange((value) => {
           this.plugin.settings.prefixCurrentNoteNameToNewNotes = value;
