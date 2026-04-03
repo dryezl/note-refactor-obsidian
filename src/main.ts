@@ -41,13 +41,19 @@ export default class NoteRefactor extends Plugin {
     this.addCommand({
       id: 'app:extract-selection-first-line',
       name: 'Extract selection to new note - first line as file name',
-      callback: () => this.editModeGuard(async () => await this.extractSelectionFirstLine('replace-selection')),
+      callback: () => this.editModeGuard(async () => await this.extractSelectionFirstLine('replace-selection', false)),
       hotkeys: [
         {
           modifiers: ["Mod", "Shift"],
           key: "n",
         },
       ],
+    });
+
+    this.addCommand({
+      id: 'app:extract-selection-first-line-with-current-note-prefix',
+      name: 'Extract selection to new note - first line as file name with prefix of current note name',
+      callback: () => this.editModeGuard(async () => await this.extractSelectionFirstLine('replace-selection', true)),
     });
 
     this.addCommand({
@@ -71,7 +77,7 @@ export default class NoteRefactor extends Plugin {
     this.addCommand({
       id: 'app:split-note-first-line',
       name: 'Split note here - first line as file name',
-      callback: () => this.editModeGuard(() => this.extractSelectionFirstLine('split')),
+      callback: () => this.editModeGuard(() => this.extractSelectionFirstLine('split', this.settings.prefixCurrentNoteNameToNewNotes)),
     });
 
     this.addCommand({
@@ -124,7 +130,7 @@ export default class NoteRefactor extends Plugin {
       headingNotes.forEach((hn, i) => this.createNoteWithFirstLineAsFileName(dedupedFileNames[i], hn, mdView, doc, 'replace-headings', true));
   }
 
-  async extractSelectionFirstLine(mode: ReplaceMode): Promise<void> {
+  async extractSelectionFirstLine(mode: ReplaceMode, prefixCurrentNoteNameToFileName: boolean): Promise<void> {
       const mdView = this.app.workspace.activeLeaf.view as MarkdownView;
       const doc = mdView.editor;
       if(!mdView) {return}
@@ -132,7 +138,7 @@ export default class NoteRefactor extends Plugin {
       const selectedContent = mode === 'split' ? this.NRDoc.noteRemainder(doc) : this.NRDoc.selectedContent(doc);
       if(selectedContent.length <= 0) { return }
 
-      const header = this.settings.prefixCurrentNoteNameToNewNotes
+      const header = prefixCurrentNoteNameToFileName
           ? mdView.file.basename + NOTE_NAME_SEPARATOR + selectedContent[0]
           : selectedContent[0];
       await this.createNoteWithFirstLineAsFileName(header, selectedContent, mdView, doc, mode, false);
