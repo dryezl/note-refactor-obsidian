@@ -53,7 +53,7 @@ export default class NoteRefactor extends Plugin {
     this.addCommand({
       id: 'app:extract-selection-first-line-with-current-note-prefix',
       name: 'Extract selection to new note - first line as file name with prefix of current note name',
-      callback: () => this.editModeGuard(async () => await this.extractSelectionFirstLine('replace-selection', true, ' ')),
+      callback: () => this.editModeGuard(async () => await this.extractSelectionFirstLine('replace-selection', true, ' - ')),
     });
 
     this.addCommand({
