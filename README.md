@@ -32,6 +32,7 @@ This table shows the different use cases for this plugin and how commands and se
 | 3 | 1. Extract a selection into a new note.<br />2. File name for new note set from the first line of the selection.<br />3. First line included in the new note as a heading. | Extract selection to new note - first line as file name | **Exclude First Line**<br />False <br/><br />**Include Heading**<br />True |
 | 4 | 1. Extract a selection into a new note<br />2. File name for new note set from the first line of the selection.<br />3. First line not included in the new note. | Extract selection to new note - first line as file name | **Exclude First Line**<br />True <br/><br /> |
 | 5 | 1. Extract a selection into a new note exactly as it is.<br />2. File name for new note is generated from the **File name prefix** setting. | Extract selection to new note - only prefix as file name | |
+| 6 | 1. Extract a selection into a new note.<br />2. File name is set to `Current Note Name First line of selection` (e.g. `2025-04-24 New Note`). | Extract selection to new note - first line as file name with prefix of current note name | |
 
 ### Splitting
 
@@ -72,6 +73,10 @@ Extracting the current selection into a new note or append to an existing one.
 
 This command copies the selected text into the content of a new note using the first line as the file name for the new note or append to an existing one.
 ![first line file name demo](https://raw.githubusercontent.com/lynchjames/note-refactor-obsidian/master/images/Note-Refactor-Demo-First-Line-as-File-Name.gif)
+
+#### Extract selection to new note or append to existing note - first line as filename with prefix of current note name
+
+This command copies the selected text into the content of a new note using `Current Note Name First line of selection` as the file name for the new note, or append to an existing one.
 
 #### Extract selection to new note or append to existing note - content only
 
@@ -136,8 +141,11 @@ With the setting enabled and a note named `Research` split by H2 headings:
 The setting applies to the following commands:
 
 - **Split note by headings – H1 / H2 / H3**
-- **Extract selection to new note – first line as file name**
 - **Split note here – first line as file name**
+
+The command **Extract selection to new note – first line as file name** does not use this setting.
+
+The command **Extract selection to new note – first line as file name with prefix of current note name** always prefixes the current note name regardless of this setting.
 
 ### Transclude by Default
 
